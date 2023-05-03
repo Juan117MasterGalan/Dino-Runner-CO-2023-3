@@ -1,5 +1,5 @@
 import pygame
-from dino_runner. utils.constants import SCREEN_WIDTH
+from dino_runner. utils.constants import SCREEN_WIDTH, DINODEAD
 
 class Obstacle:
     def __init__(self, image):
@@ -10,7 +10,8 @@ class Obstacle:
     def update(self, game_speed, player):
         self.rect.x -= game_speed
         if self.rect.colliderect(player.dino_rect):
-            pygame.time.delay(900)
+            pygame.time.delay(500)
+            self.player.image = DINODEAD
             player.dino_dead = True
 
     def draw(self, screen):

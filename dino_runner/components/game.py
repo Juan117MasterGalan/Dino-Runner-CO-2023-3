@@ -1,6 +1,6 @@
 import pygame
 import random
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD, DINODEAD
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
@@ -54,6 +54,7 @@ class Game:
         self.obstacle_manager.update(self.game_speed, self.player)
         self.power_up_manager.update(self.game_speed, self.points, self.player)
         if self.player.dino_dead:
+            self.player.image = DINODEAD
             self.playing = False
 
     def draw(self):
