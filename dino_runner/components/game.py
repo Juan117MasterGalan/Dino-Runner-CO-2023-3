@@ -1,11 +1,23 @@
 import pygame
-
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+import random
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 
 
 class Game:
+    frames_clouds = 0
+    clouds = []
+    for i in range (6):
+        x_pos_cloud = 1000
+        y_pos_cloud = random.randint(0, 300)
+        speed_cloud = random.randint(1, 8)
+        list_clouds = [x_pos_cloud, y_pos_cloud, speed_cloud]
+        clouds.append(list_clouds)
+
+
+
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -17,7 +29,9 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
-        self.obstacle_mangaer = ObstacleManager()    
+        self.obstacle_manager = ObstacleManager()    
+        self.power_up_manager = PowerUpManager()    
+        self.points = 0 
 
     def run(self):
         # Game loop: events - update - draw
@@ -34,9 +48,11 @@ class Game:
                 self.playing = False
 
     def update(self):
+        self.points +=1
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.obstacle_mangaer.update(self.game_speed, self.player)
+        self.obstacle_manager.update(self.game_speed, self.player)
+        self.power_up_manager.update(self.game_speed, self.points, self.player)
         if self.player.dino_dead:
             self.playing = False
 
@@ -45,11 +61,35 @@ class Game:
         self.screen.fill((255, 255, 255))
         self.draw_background()
         self.player.draw(self.screen)
-        self.obstacle_mangaer.draw(self.screen)
+        self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
         
     def draw_background(self):
+        for a in self.clouds:
+            a[0] -= a[2]
+            if a[0] < -200:
+                a[0] = 1200
+                a[1] = random.randint(0, 360)
+                a[2] = random.randint(1, 8)
+                
+        self.frames_clouds += 1
+        if self.frames_clouds >= 71:
+            self.frames_clouds = 1
+        if self.frames_clouds < 11:
+            for a in self.clouds:
+                self.screen.blit(CLOUD, (a[0], a[1]))
+        if self.frames_clouds < 31:
+            for a in self.clouds:
+                self.screen.blit(CLOUD, (a[0], a[1]))
+        if self.frames_clouds < 51:
+            for a in self.clouds:
+                self.screen.blit(CLOUD, (a[0], a[1]))
+        if self.frames_clouds < 71:
+            for a in self.clouds:
+                self.screen.blit(CLOUD, (a[0], a[1]))
+
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
