@@ -1,11 +1,10 @@
-import random, pygame
+import random
 from dino_runner.components.obstacles.obstacle import Obstacle
-from dino_runner.utils.constants import BIRD, SCREEN_WIDTH, DINODEAD
-from dino_runner.components.dinosaur import Dinosaur
+from dino_runner.utils.constants import BIRD, SCREEN_WIDTH
 
 class Bird(Obstacle):
-    BIRD_HEIGHTS = [260, 220, 170]
-    Y_POS_BIRD =  random.choice(BIRD_HEIGHTS)
+    BIRD_HEIGHTS = [260, 220, 150]
+    Y_POS_BIRD =  BIRD_HEIGHTS[random.randint(0, 2)]
     
     def __init__(self):
         self.image = BIRD[0]
@@ -18,13 +17,11 @@ class Bird(Obstacle):
 
     def update(self, game_speed, player):
         self.rect.x -= game_speed
-        if self.image == BIRD[0] or self.image == BIRD[1]:
-            self.image == BIRD[0] if self.steps_index < 5 else BIRD[1]
-            self.steps_index +=1
-            if self.steps_index >= 10:
-                self.steps_index = 0
         super().update(game_speed, player)
                
 
     def draw(self, screen):
-        screen.blit(self.image, self.bird_rect)
+        if self.steps_index >= 10:
+            self.steps_index = 0
+        screen.blit(BIRD[self.steps_index // 5], (self.rect.x, self.rect.y))
+        self.steps_index += 1

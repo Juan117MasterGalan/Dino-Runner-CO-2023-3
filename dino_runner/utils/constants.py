@@ -6,7 +6,10 @@ TITLE = "Chrome Dino Runner"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 FPS = 30
+GAME_SPEED = 0.5
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
+#MUS_DIR = os.path.join(os.path.dirname(__file__), "..", "assets", "musica")
+#TEMAZO = os.path.join(MUS_DIR, "Dino-Runner-CO-2023-3\dino_runner\assets\Other\music\rayman.mp3")
 
 # Assets Constants
 ICON = pygame.image.load(os.path.join(IMG_DIR, "DinoWallpaper.png"))
@@ -64,6 +67,10 @@ BIRD = [
     pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird2.png")),
 ]
+BIRD_CARACTER = [
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird1_caracter.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird1_caracter.png"))
+]
 
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
@@ -73,6 +80,9 @@ BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
+RESET = pygame.image.load(os.path.join(IMG_DIR, "Other/Reset.png"))
+
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = "shield"
 HAMMER_TYPE = "hammer"
+

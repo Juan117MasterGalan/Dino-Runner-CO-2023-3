@@ -5,6 +5,7 @@ class Dinosaur:
     X_POS = 80
     Y_POS = 310
     Y_POS_DUCK = 340
+    Y_POS_DOUBLE = 200
     JUMP_VEL = 8.5
 
     def __init__(self):
@@ -17,13 +18,15 @@ class Dinosaur:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
+        self.dino_rect.y = self.Y_POS_DOUBLE
         self.step_index = 0
         self.dino_run = True
         self.dino_duck = False
         self.dino_jump = False
+        self.dino_double_jump = False
         self.jump_vel = self.JUMP_VEL
         self.dino_dead = False
-        self.DINODEAD = DINODEAD
+        self.dinodead = DINODEAD
         self.shield = False
         self.hammer = False
         self.time_up_power_up = 0
@@ -35,31 +38,41 @@ class Dinosaur:
             self.duck()
         if self.dino_run:
             self.run()
+        if self.dino_double_jump:
+            self.double_jump()
 
         if user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_run = False
             self.dino_duck = True
             self.dino_jump = False
+            self.dino_double_jump = False
         elif user_input[pygame.K_UP] and not self.dino_jump:
             self.dino_run = False
             self.dino_duck = False
             self.dino_jump = True
+            self.dino_double_jump = False
+        elif user_input[pygame.K_a] and not self.dino_jump:
+            self.dino_run = False
+            self.dino_duck = False
+            self.dino_jump = False
+            self.dino_double_jump = True
         elif not self.dino_jump:
             self.dino_run = True
             self.dino_duck = False
             self.dino_jump = False
+            self.dino_double_jump = False
         
         if self.step_index >= 10:
             self.step_index = 0
 
         if self.shield:
-            time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 1000, 2)
-            if time_to_show < 0:
+            time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 10000, 2)
+            if time_to_show > 0:
                 self.reset()
 
         if self.hammer:
-            time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 1000, 2)
-            if time_to_show < 0:
+            time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 10000, 2)
+            if time_to_show > 0:
                 self.reset()
 
         if self.dino_dead == True:
@@ -91,6 +104,16 @@ class Dinosaur:
             self.dino_rect.y = self.Y_POS
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
+    
+    def double_jump(self):
+        self.image = self.jump_img[self.type]
+        if self.dino_double_jump:
+            self.dino_rect.y -= self.jump_vel * 8
+            self.jump_vel -= 1
+        if self.jump_vel < -self.JUMP_VEL:
+            self.dino_rect.y = self.Y_POS
+            self.dino_double_jump = False
+            self.jump_vel = self.JUMP_VEL
 
     def dead(self):
         if self.dino_duck:
@@ -108,7 +131,7 @@ class Dinosaur:
             self.shield = True
             self.time_up_power_up = power_up.time_up
             print (self.type)
-        if power_up.type == HAMMER_TYPE:
+        elif power_up.type == HAMMER_TYPE:
             self.type = HAMMER_TYPE
             self.hammer = True
             self.time_up_power_up = power_up.time_up

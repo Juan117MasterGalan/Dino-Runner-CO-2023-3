@@ -1,11 +1,12 @@
 import pygame
 import random
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD, DINODEAD
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD, RESET
 from dino_runner.components.dinosaur import Dinosaur
+from dino_runner.components.caracter import Bird_caracter
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.components import text_utils
-
+from dino_runner.utils.constants import GAME_SPEED
 
 class Game:
     frames_clouds = 0
@@ -26,10 +27,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = False
         self.playing = False
-        self.game_speed = 20
+        self.game_speed = GAME_SPEED
         self.x_pos_bg = 0
         self.y_pos_bg = 380
-        self.player = Dinosaur()
+        self.player = Bird_caracter()
         self.obstacle_manager = ObstacleManager()    
         self.power_up_manager = PowerUpManager()    
         self.points = 0 
@@ -40,6 +41,8 @@ class Game:
         # Game loop: events - update - draw
         self.running = True
         while self.running:
+            #pygame.mixer.music.load(TEMAZO) == 0
+            #pygame.mixer.music.play(-1)
             self.events()
             self.update()
             self.draw()
@@ -128,6 +131,7 @@ class Game:
             text, text_rect = text_utils.get_message("Press any key to Start", 30)
             self.screen.blit(text, text_rect)
         else:
+            pygame.display.set_icon(RESET)
             text, text_rect = text_utils.get_message("Press any key to Resert", 30)
             score, score_rect = text_utils.get_message("Your score: " + str(self.points), 30, height= SCREEN_HEIGHT//2 + 50)
             self.screen.blit(text, text_rect)

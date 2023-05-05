@@ -1,6 +1,7 @@
 from dino_runner.components.power_ups.shield import Shield
 from dino_runner.components.power_ups.hammer import Hammer
 
+
 class PowerUpManager:
     def __init__(self):
         self.power_ups = []
